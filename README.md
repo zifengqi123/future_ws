@@ -58,3 +58,37 @@ pos@IRL8:~/pos_ws/LYNQ_SDK_ASR_L508_X6_ZY-001_V04.01.02.01$
 pos@IRL8:~/pos_ws/LYNQ_SDK_ASR_L508_X6_ZY-001_V04.01.02.01$ ./build.sh 
 
 ```
+
+# 三、 问题解答
+
+1. arm-openwrt-linux-gcc的编译工具链toolchain:
+arm-openwrt-linux-g++.bin: warning: environment variable ‘STAGING_DIR’ not defined
+
+```
+vi ~/.bashrc
+
+export PATH=$PATH:/home/pos/pos_ws/LYNQ_SDK_ASR_L508_X6_ZY-001_V04.01.02.01/mbtk/toolchain/linux64/bin
+export STAGING_DIR=$STAGING_DIR:/home/pos/pos_ws/LYNQ_SDK_ASR_L508_X6_ZY-001_V04.01.02.01/mbtk/toolchain/linux64/bin
+
+source ~/.bashrc
+```
+
+2. 运行时提示找不到库
+```
+export LD_LIBRARY_PATH=.:$LD_LIBRARY_PATH
+chmod +x future_test
+./future_test
+```
+
+# 四、使用工具链
+将工具链toolchain.tar.gz解压至/usr/local目录
+CMakeLists.txt 中设置工具链
+```
+set(CMAKE_SYSTEM_NAME Linux)
+set(CMAKE_SYSTEM_PROCESSOR arm)
+
+set(tools /usr/local/toolchain/linux64)
+set(CMAKE_C_COMPILER ${tools}/bin/arm-openwrt-linux-gnueabi-gcc)
+set(CMAKE_CXX_COMPILER ${tools}/bin/arm-openwrt-linux-gnueabi-g++)
+```
+
