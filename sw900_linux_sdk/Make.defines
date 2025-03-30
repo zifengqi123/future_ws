@@ -1,0 +1,71 @@
+# Common make definitions, customized for each platform
+
+# Definitions required in all program directories to compile and link
+# C programs using gcc.
+
+# static / shared
+BUILD_LIB_TYPE = shared
+# gcc-4.9 / gcc-8.4
+BUILD_PLATFORM = gcc-8.4
+ROOT = $(BUILD_ROOT)
+OUT_DIR = $(ROOT)/out
+BUILD_TOOLCHAIN_DIR =/usr/local/toolchain/linux64
+LOCAL_PATH=.
+
+export STAGING_DIR=
+
+ifeq ($(BUILD_PLATFORM), gcc-4.9)
+CC=$(BUILD_TOOLCHAIN_DIR)/bin/arm-openwrt-linux-muslgnueabi-gcc
+AR=$(BUILD_TOOLCHAIN_DIR)/bin/arm-openwrt-linux-muslgnueabi-ar
+else ifeq ($(BUILD_PLATFORM), gcc-8.4)
+CC=$(BUILD_TOOLCHAIN_DIR)/bin/arm-openwrt-linux-gnueabi-gcc
+AR=$(BUILD_TOOLCHAIN_DIR)/bin/arm-openwrt-linux-gnueabi-ar
+else
+CC=gcc
+AR=ar
+endif
+
+MAKE=make
+
+$(info BUILD_LIB_TYPE=$(BUILD_LIB_TYPE))
+$(info BUILD_PLATFORM=$(BUILD_PLATFORM))
+$(info ROOT=$(ROOT))
+$(info CC=$(CC))
+$(info AR=$(AR))
+
+# -Werror=non-virtual-dtor
+CFLAGS= --sysroot=$(BUILD_TOOLCHAIN_DIR) -Os -pipe -rdynamic -march=armv7-a -mtune=cortex-a7 -mfpu=neon-vfpv4 -fno-caller-saves -fhonour-copts -Wno-error=unused-but-set-variable -mfloat-abi=hard -fno-exceptions -Wno-multichar -ffunction-sections -fdata-sections -funwind-tables -Wa,--noexecstack -fno-short-enums -no-canonical-prefixes -fno-canonical-system-headers -mfpu=neon -fno-builtin-sin -fno-strict-volatile-bitfields -Wno-psabi -mthumb-interwork -fmessage-length=0 -W -Wall -Wno-unused -Winit-self -Wpointer-arith  -g -Wstrict-aliasing=2 -fgcse-after-reload -frerun-cse-after-loop -frename-registers -mthumb -fomit-frame-pointer -fno-strict-aliasing -Werror=format-security -Werror=return-type -Werror=address -Werror=sequence-point -ffunction-sections -Wl,--gc-sections -Wl,--no-undefined -Wno-sign-compare -Wno-pointer-arith 
+
+AWK=awk
+
+#CFLAGS += -Wno-error=format-truncation -Wno-error=format-overflow= -Wno-error=stringop-overread -Wno-error=deprecated-declarations
+
+INC_DIR = \
+	-I$(LOCAL_PATH)/ \
+	-I$(LOCAL_PATH)/inc \
+	-I$(BUILD_ROOT)/include \
+	-I$(BUILD_ROOT)/include/mbtk \
+	-I$(BUILD_ROOT)/include/lynq \
+	-I$(BUILD_ROOT)/include/mqtt \
+	-I$(BUILD_ROOT)/include/ql
+
+# -DCONFIG_AB_SYSTEM
+DEFINE = \
+	-DMBTK_SUPPORT \
+	-DMARVELL_EXTENDED \
+	-DPXA1826_AUDIO \
+	-D__USE_GNU \
+	-DNOT_DROPPED_FLAGS_TEST \
+	-DNDEBUG \
+	-UDEBUG \
+	-D_FORTIFY_SOURCE=2 \
+	-D_GNU_SOURCE
+
+LIB_DIR = \
+	-L$(BUILD_ROOT)/rootfs/lib \
+	-L$(OUT_DIR)/lib
+
+LIBS = -lpthread -lstdc++
+
+# Common temp files to delete from each directory.
+TEMPFILES=core core.* *.o temp.* *.out

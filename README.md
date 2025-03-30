@@ -92,3 +92,7 @@ set(CMAKE_C_COMPILER ${tools}/bin/arm-openwrt-linux-gnueabi-gcc)
 set(CMAKE_CXX_COMPILER ${tools}/bin/arm-openwrt-linux-gnueabi-g++)
 ```
 
+修改lvgl_v9.2/lv_port_linux/lvgl/src/drivers/display/fb/lv_linux_fbdev.c
+Line 105: lv_display_t * disp = lv_display_create(320, 240);
+Line 184: dsc->finfo.line_length = 640;
+

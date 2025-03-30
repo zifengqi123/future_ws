@@ -1,0 +1,20 @@
+#!/bin/sh
+
+mbtk_start() {
+	echo "start : $1" > /dev/kmsg
+
+	# stdout and stderr > /dev/null
+	#$@ &> /dev/null &
+	(while ! $@ &> /dev/null;           do echo "Restarting $@ ...";               done) &
+}
+
+start_service() {
+	echo "--mbtk server ready boot start--" > /dev/kmsg
+
+	#mbtk_start /bin/mbtk_info_test
+	mbtk_start /bin/mbtk_logd
+
+	echo "--mbtk server ready boot end--" > /dev/kmsg
+}
+
+start_service

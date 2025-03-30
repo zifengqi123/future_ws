@@ -1,0 +1,111 @@
+{
+    "logd": "enable",
+
+    /* (mandatory) alternate ring buffer list */
+    "buffer_list" :
+    [
+        {
+            "enable": 1,
+            /* (mandatory) alternate ring buffer name, 'main', 'system', 'events' */
+            "name" : "syslog",
+            /* log output format : log type, time, pid, tid, tag, msg */
+            /* log type : k->kernel, e->events, s->system, m->main */
+            /* (mandatory) log file path */
+            "log_file":"/var/log/sys_log.txt",
+
+            /* (optional) remote server ip and port */
+            /* "log_stream":"118.114.239.159:30177", */
+
+            /* (optional) rotate log every kbytes, default is unlimit */
+            "rotate_file_size":  1024,
+            /* (optional) max number of rotated logs,  -1 is unlimit */
+            "rotate_file_count": 5,
+
+            /* (optional) log format, default or csv */
+            "log_format":"default",
+            /* (mandatory) filter */
+            "filter_list" :
+            [
+                {
+                    /* (optional) priority, 'v(VERBOSE)', 'd(DEBUG)', 'i(INFO)', 'w(WARN)',  'e(ERROR)', 'f(FATAL)', '*(all)' */
+                    "priority":"*"
+                },
+                {
+                    "tag":"gnss_test",
+                    "priority":"*"
+                }
+            ]
+        },
+        {
+            "enable": 1,
+            "name" : "radio",
+            /* (mandatory) log file path */
+            "log_file":"/tmp/log/radio_log.txt",
+            /* (optional) rotate log every kbytes, default is unlimit */
+            "rotate_file_size":  8,
+            /* (optional) max number of rotated logs, -1 is unlimit */
+            "rotate_file_count": 8,
+
+            /* (optional) log format, default or csv */
+            "log_format":"default",
+            "filter_list" :
+            [
+                {
+                    "tag":"mbtk_api",
+                    "priority":"*"
+                },
+				{
+                    "tag":"MBTK_RIL",
+                    "priority":"*"
+                },
+				{
+                    "tag":"tcp_cli",
+                    "priority":"*"
+                },
+                {
+                    "priority":"e"
+                }
+            ]
+        },
+        {
+            "enable": 0,
+            "name" : "/dev/ttyS1",
+            /* (mandatory) log file path */
+            "log_file":"/tmp/log/uart_log.txt",
+            /* (optional) rotate log every kbytes, default is unlimit */
+            "rotate_file_size":  8,
+            /* (optional) max number of rotated logs, -1 is unlimit */
+            "rotate_file_count": 8,
+
+            /* (optional) log format, default or csv */
+            "log_format":"default",
+            "filter_list" :
+            [
+                {
+                    "tag":"mbtk_uart",
+                    "priority":"*"
+                }
+            ]
+        },
+        {
+            "enable": 0,
+            "name" : "local_socket",
+            /* (mandatory) log file path */
+            "log_file":"/tmp/log/signal_log.txt",
+            /* (optional) rotate log every kbytes, default is unlimit */
+            "rotate_file_size":  8,
+            /* (optional) max number of rotated logs, -1 is unlimit */
+            "rotate_file_count": 8,
+
+            /* (optional) log format, default or csv */
+            "log_format":"default",
+            "filter_list" :
+            [
+                {
+                    "tag":"mbtk_socket",
+                    "priority":"*"
+                }
+            ]
+        }
+    ]
+}

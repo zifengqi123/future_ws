@@ -1,0 +1,101 @@
+#!/bin/sh
+
+#MBTK_ADB=`getprop persist.mbtk.adb 2> /dev/null`
+project=`cat /etc/mbtk_project`
+
+mbtk_start() {
+	echo "start : $1" > /dev/kmsg
+	
+	# stdout and stderr > /dev/null
+	#$@ &> /dev/null &
+	(while ! $@ &> /dev/null;           do echo "Restarting $@ ...";               done) &
+}
+
+start_service() {
+	echo "--mbtk eary boot start--" > /dev/kmsg
+#	mbtk_start /bin/mbtk_test
+#	mbtk_start /bin/mbtk_test "eary" 123
+    # É¾³ýÉÏ´Îgnss ÐÇÀú
+    if [ -f /etc/mbtk/rtm.bin ]
+    then
+	    echo "--mbtk eary boot rtm.bin " > /dev/kmsg
+        rm /etc/mbtk/rtm.bin
+    fi
+
+	mbtk_start /bin/mbtk_rild
+	
+	if [ -f /bin/mbtk_sdk_ready ]
+	then
+		mbtk_start /bin/mbtk_sdk_ready
+		echo "--mbtk platform mbtk_sdk_ready start--" > /dev/kmsg
+	fi
+	
+	if [ "$project" == "T108_2" ];then
+		[ -e /bin/mbtk_gnssd ] && mbtk_start mbtk_gnssd 8122 /dev/ttyS3 0
+	elif [ "$project" == "L508_X6" ];then
+		[ -e /bin/mbtk_gnssd ] && mbtk_start mbtk_gnssd 5311 /dev/ttyS3 255
+	else
+		# Only auto open gnss but not open any port.
+		[ -e /bin/mbtk_gnssd ] && mbtk_start mbtk_gnssd 5311 /dev/ttyS2 255
+	fi
+
+	if [ "$project" == "L508_X6" -o "$project" == "L509" ]
+	then
+		#echo "$project"
+		i2cset -y -f 2 0x32 0x0d 0x00
+	fi
+	echo "--mbtk eary boot end--" > /dev/kmsg
+}
+
+sleep_init()
+{
+	if [ -e /sys/devices/soc.0/d4000000.apb/mbtk-dev-op/gps_power ]
+	then
+		echo off  > /sys/devices/soc.0/d4000000.apb/mbtk-dev-op/gps_power
+	else
+		echo "/sys/devices/soc.0/d4000000.apb/mbtk-dev-op/gps_power can not write." > /dev/kmsg
+	fi
+	
+	if [ -e /sys/kernel/debug/spk_shdn_gpio ]
+	then
+		echo 0 > /sys/kernel/debug/spk_shdn_gpio
+	else
+		echo "/sys/kernel/debug/spk_shdn_gpio can not write." > /dev/kmsg
+	fi
+	
+	if [ -e /sys/devices/asr-rfkill.0/pwr_ctrl ]
+	then
+		echo 1 > /sys/devices/asr-rfkill.0/pwr_ctrl
+		sleep 1
+		echo 0 > /sys/devices/asr-rfkill.0/pwr_ctrl
+	else
+		echo "/sys/devices/asr-rfkill.0/pwr_ctrl can not write." > /dev/kmsg
+	fi
+
+	case "$project" in
+		PN1803)
+			echo 4 > /sys/class/gpio/export
+			echo out > /sys/class/gpio/gpio4/direction
+			echo 0 > /sys/class/gpio/gpio4/value
+			;;
+		L509)
+			echo 5 > /sys/class/gpio/export
+			echo out > /sys/class/gpio/gpio5/direction
+			echo 0 > /sys/class/gpio/gpio5/value
+			
+			echo 8 > /sys/class/gpio/export
+			echo out > /sys/class/gpio/gpio8/direction
+			echo 1 > /sys/class/gpio/gpio8/value
+			;;
+	esac
+	
+	if [ "$project" == "PN1803" -o "$project" == "L508" -o "$project" == "L509"]
+	then
+		echo 118 > /sys/class/gpio/export
+		echo out > /sys/class/gpio/gpio118/direction
+		echo 0 > /sys/class/gpio/gpio118/value
+	fi
+}
+
+start_service
+sleep_init

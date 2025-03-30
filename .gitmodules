@@ -1,0 +1,3 @@
+[submodule "lvgl_v9.2/lv_port_linux"]
+	path = lvgl_v9.2/lv_port_linux
+	url = https://github.com/zifengqi123/lv_port_linux.git

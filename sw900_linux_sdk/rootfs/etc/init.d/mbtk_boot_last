@@ -1,0 +1,26 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2006-2011 OpenWrt.org
+
+START=98
+USE_PROCD=1
+
+#MBTK_ADB=`getprop persist.mbtk.adb 2> /dev/null`
+
+mbtk_start() {
+	echo "start : $1" > /dev/kmsg
+
+	procd_open_instance
+	procd_set_param command $@
+	procd_close_instance
+}
+
+start_service() {
+	echo "--mbtk last boot start--" > /dev/kmsg
+#	mbtk_start /bin/mbtk_test
+#	mbtk_start /bin/mbtk_test "last" 123
+	
+	
+	
+	echo "--mbtk last boot end--" > /dev/kmsg
+}
+
