@@ -26,7 +26,8 @@ private:
 
 public:
 
-    future_comm(std::string port_name, int baudrate);
+    future_comm(std::string port_name, int baudrate, int timeout,
+                    std::function<void(std::vector<uint8_t>)> callback);
 
     ~future_comm();
     
@@ -38,8 +39,6 @@ public:
     int sendcmd(std::vector<uint8_t> buf);
 
     static void* cmd_recv_thread_func(void* arg);
-
-    void set_recv_callback(std::function<void(std::vector<uint8_t>)> callback);
 
     uint8_t t_buffer[1024];
 

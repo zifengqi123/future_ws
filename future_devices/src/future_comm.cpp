@@ -2,13 +2,16 @@
 
 namespace future {
 
-future_comm::future_comm(std::string port_name, int baudrate) {
+future_comm::future_comm(std::string port_name, int baudrate, int timeout,
+        std::function<void(std::vector<uint8_t>)> callback) {  
+
+    recv_callback_ = callback;
 
     printf("future_comm port_name: %s, baudrate: %d\n", port_name.c_str(), baudrate);
 
-    serial::Timeout to = serial::Timeout::simpleTimeout(200);
-    to.write_timeout_constant = 200;
-    to.read_timeout_constant = 200;
+    serial::Timeout to = serial::Timeout::simpleTimeout(timeout);
+    to.write_timeout_constant = timeout;
+    to.read_timeout_constant = timeout;
     to.read_timeout_multiplier = 10;
 
     _serial = new serial::Serial();
@@ -87,7 +90,7 @@ int future_comm::sendcmd(std::vector<uint8_t> buf) {
 
     pthread_mutex_unlock(&cmd_recv_mutex_);
 
-    if(ret != buf.size()) {
+    if(ret != sb.size()) {
         printf("send Error: %d, %s\n", ret, printBuf("send: ", sb).c_str());
         return -1;
     }
@@ -167,8 +170,5 @@ void* future_comm::cmd_recv_thread_func(void* arg) {
     return nullptr;
 }
 
-void future_comm::set_recv_callback(std::function<void(std::vector<uint8_t>)> callback) {   
-    recv_callback_ = callback;
-}
 
 }

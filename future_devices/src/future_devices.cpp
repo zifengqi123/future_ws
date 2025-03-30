@@ -5,9 +5,7 @@ namespace future {
 future_devices::future_devices() {
     if(_comm == nullptr) {
         // 安全芯片端口: /dev/ttyS1, 波特率: 460800
-        _comm = new future_comm("/dev/ttyS1", 460800);
-
-        _comm->set_recv_callback([&](std::vector<uint8_t> buf) {
+        _comm = new future_comm("/dev/ttyS1", 460800, 500, [&](std::vector<uint8_t> buf) {
 
             printf("callback: %s\n", _comm->printBuf("recv: ", buf).c_str());
 
@@ -90,6 +88,8 @@ int future_devices::recv_from_list(int8_t cmd, std::vector<uint8_t> &buf){
                         buf = std::vector<uint8_t>(tmp.begin() + 8, tmp.begin() + 8 + ln - 4);
                     }
                 }
+
+                printf("recv costed time: %d ms\n", recv_timeout - timeout);
                 return ret; 
             }
         }
@@ -97,6 +97,8 @@ int future_devices::recv_from_list(int8_t cmd, std::vector<uint8_t> &buf){
         usleep(1000);
         timeout--;
     }
+
+    printf("Err. recv timeout: %d ms\n", recv_timeout - timeout);
     
     return ret;
 }
