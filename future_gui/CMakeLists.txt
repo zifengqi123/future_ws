@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
-project(future_devices)
+project(future_gui)
 
 # Usage:
 # cmake -B build -S .
@@ -28,29 +28,13 @@ set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
 
 include_directories(
     include
-    include/serial
+    ${PROJECT_SOURCE_DIR}/../lvgl_v9.2/lv_port_linux/
     )
 
-add_library(future_devices SHARED 
-    ${PROJECT_SOURCE_DIR}/src/future_devices.cpp
-    ${PROJECT_SOURCE_DIR}/src/future_comm.cpp
-    ${PROJECT_SOURCE_DIR}/src/serial/serial.cpp
-    ${PROJECT_SOURCE_DIR}/src/serial/list_ports_linux.cpp
-    ${PROJECT_SOURCE_DIR}/src/serial/unix.cpp
+add_library(future_gui SHARED 
+    ${PROJECT_SOURCE_DIR}/src/status_ui.cpp
 )
 
-add_executable(future_test 
-    test/future_test.cpp
-)
-
-target_link_libraries(future_test 
-    future_devices
-)
-
-target_link_libraries(future_test 
-    future_devices 
-    pthread 
-)
 
 # Install the lvgl_linux library and its headers
 install(DIRECTORY build/lib/
@@ -58,7 +42,7 @@ install(DIRECTORY build/lib/
     FILES_MATCHING
     PATTERN "*.h")
 
-install(TARGETS future_devices
+install(TARGETS future_gui
     ARCHIVE DESTINATION lib
 )
 
