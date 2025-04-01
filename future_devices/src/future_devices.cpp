@@ -10,7 +10,7 @@ future_devices::future_devices() {
             printf("callback: %s\n", _comm->printBuf("recv: ", buf).c_str());
 
             // 读取键盘输入
-            if (buf[0] == CMD_READ_KEYBOARD_INPUT && buf[1] == 0x3F) {
+            if (buf[0] == CMD_READ_KEYBOARD_INPUT && buf[1] == 0x4F) {
                 uint32_t key = buf[4];
                 key = (key<<8) + buf[5];
                 key = (key<<8) + buf[6];
@@ -199,8 +199,8 @@ int future_devices::get_clock(std::vector<uint8_t>& time) {
     return ret;
 }
 
-int future_devices::beep(uint8_t frequency) {
-    send_request_cmd(CMD_BEEP, {frequency});
+int future_devices::beep(uint8_t type) {
+    send_request_cmd(CMD_BEEP, {type});
 
     std::vector<uint8_t> buf;
     int ret = recv_from_list(CMD_BEEP, buf);

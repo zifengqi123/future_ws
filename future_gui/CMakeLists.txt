@@ -29,12 +29,20 @@ set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
 include_directories(
     include
     ${PROJECT_SOURCE_DIR}/../lvgl_v9.2/lv_port_linux/
+    ${PROJECT_SOURCE_DIR}/../future_devices/include/
     )
 
 add_library(future_gui SHARED 
     ${PROJECT_SOURCE_DIR}/src/status_ui.cpp
+    ${PROJECT_SOURCE_DIR}/src/input_ui.cpp
+    ${PROJECT_SOURCE_DIR}/src/notice_ui.cpp
+    ${PROJECT_SOURCE_DIR}/src/menu_ui.cpp
 )
 
+
+target_link_libraries(future_gui
+    ${PROJECT_SOURCE_DIR}/../future_devices/build/lib/libfuture_devices.so
+)
 
 # Install the lvgl_linux library and its headers
 install(DIRECTORY build/lib/

@@ -6,7 +6,7 @@ namespace future_gui
 notice_ui::notice_ui(lv_obj_t *parent)
 {
     _notice_ui.parent = parent;
-    notice_init(_notice_ui.parent, 0, STATUS_VIEW_HIGHT, NOTICE_VIEW_WIDTH, NOTICE_VIEW_HIGHT);
+    notice_init(_notice_ui.parent, 0, NOTICE_STATUS_VIEW_HIGHT, NOTICE_VIEW_WIDTH, NOTICE_VIEW_HIGHT);
 }
 
 notice_ui::~notice_ui()

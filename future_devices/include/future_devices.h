@@ -101,10 +101,10 @@ public:
 
     /**
      * @brief 蜂鸣 (命令字: 0x20)
-     * @param[in] frequency 频率 @see SDK_BEEP_NORMAL, SDK_BEEP_ABNORMAL
+     * @param[in] type 类型 @see SDK_BEEP_NORMAL, SDK_BEEP_ABNORMAL
      * @return 成功返回SDK_OK，失败返回错误码
      */     
-    int beep(uint8_t frequency);
+    int beep(uint8_t type);
 
     /**
      * @brief 蜂鸣器按指定的频率发声 (命令字: 0x21)
@@ -389,7 +389,7 @@ public:
     /**
      * @brief Mifare卡认证 (命令字: 0x54)
      * @param[in] block_number 块号
-     * @param[in] key_type 密钥类型
+     * @param[in] key_type 密钥类型 @see SDK_KEY_TYPE_A, SDK_KEY_TYPE_B
      * @param[in] uid 卡片序列号（UID）
      * @param[in] auth_key 认证密钥
      * @return 成功返回SDK_OK，失败返回错误码
@@ -399,7 +399,7 @@ public:
 
     /**
      * @brief Mifare卡操作 (命令字: 0x55)
-     * @param[in] operation_instruction 操作指令
+     * @param[in] operation_instruction 操作指令 @see SDK_MIFARE_CARD_OPERATION_READ, SDK_MIFARE_CARD_OPERATION_WRITE, SDK_MIFARE_CARD_OPERATION_INCREMENT, SDK_MIFARE_CARD_OPERATION_DECREMENT, SDK_MIFARE_CARD_OPERATION_TRANSFER
      * @param[in] block_number 要访问的块号
      * @param[in] target_block_number 目标块号
      * @param[in] data 数据

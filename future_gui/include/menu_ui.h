@@ -4,6 +4,8 @@
 #include <functional>
 #include <vector>
 #include <string>
+#include "future_devices.h"
+
 using namespace std;
 
 namespace future_gui {
@@ -50,28 +52,36 @@ typedef struct menu_config
 }menu_config_t;
 
 #define MENU_VIEW_WIDTH     (320)
-#define STATUS_VIEW_HIGHT   (24)
-#define MENU_VIEW_HEIGHT    (240 - STATUS_VIEW_HIGHT)
+#define MENU_STATUS_VIEW_HIGHT   (24)
+#define MENU_VIEW_HEIGHT    (240 - MENU_STATUS_VIEW_HIGHT)
 
 #define MENU_TITLE_BG_COLOR  0x00A0FF
+
+typedef struct menu_event_param
+{
+    void* menu_ui;
+    int key;
+}menu_event_param_t;
+
 
 class menu_ui {
 
 public:
-    menu_ui(lv_obj_t *parent, menu_config_t * config);
+    menu_ui(lv_obj_t *parent, menu_config_t * config, std::function<void(void* data)> cancel_callback);
     ~menu_ui();
 
     void menu_show();
-
-    lv_timer_t* _menu_timer;
-    void set_menu_key_click(std::function<void(int key)> callback);
+    
 
 public:
     ui_menu_t _menu_ui;
     menu_config_t* _menu_config;
     int _current_page = 0;
+    void menu_add_pageflag();
 
-    std::function<void(int key)> _menu_key_click;
+    uint32_t _keyboard_event_id;
+
+    std::function<void(void* data)> _cancel_callback;
 
 };
 

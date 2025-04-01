@@ -9,8 +9,8 @@ namespace future_gui
 {
 
 #define NOTICE_VIEW_WIDTH       (320)
-#define STATUS_VIEW_HIGHT       (24)
-#define NOTICE_VIEW_HIGHT       (240 - STATUS_VIEW_HIGHT)
+#define NOTICE_STATUS_VIEW_HIGHT       (24)
+#define NOTICE_VIEW_HIGHT       (240 - NOTICE_STATUS_VIEW_HIGHT)
 
 #define NOTICE_VIEW_BG_COLOR  0x00A0FF
 

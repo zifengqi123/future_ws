@@ -69,7 +69,6 @@ int future_comm::sendcmd(std::vector<uint8_t> buf) {
     if(!_serial->isOpen()) {
         return -110;
     }
-    pthread_mutex_lock(&cmd_recv_mutex_);
 
     std::vector<uint8_t> sb;
 
@@ -82,13 +81,14 @@ int future_comm::sendcmd(std::vector<uint8_t> buf) {
     sb.push_back(0x03);
     sb.push_back(xor_check(buf));
 
+    pthread_mutex_lock(&cmd_recv_mutex_);
     int ret = _serial->write(sb.data(), sb.size());
+    pthread_mutex_unlock(&cmd_recv_mutex_);
 
 #ifdef SERIAL_DEBUG_INFO
     printf("sendcmd ret: %d, %s\n", ret, printBuf("send: ", sb).c_str());
 #endif
 
-    pthread_mutex_unlock(&cmd_recv_mutex_);
 
     if(ret != sb.size()) {
         printf("send Error: %d, %s\n", ret, printBuf("send: ", sb).c_str());
@@ -103,7 +103,6 @@ void* future_comm::cmd_recv_thread_func(void* arg) {
     printf("cmd_recv_thread_func start. %d\n", comm->thread_flag_);
 
     while(comm->thread_flag_) {
-        pthread_mutex_lock(&comm->cmd_recv_mutex_);
 
         std::vector<uint8_t> recv_buf;
         try
@@ -113,6 +112,7 @@ void* future_comm::cmd_recv_thread_func(void* arg) {
             {
                 // printf("_serial->available num: %d\n", num);
 
+                pthread_mutex_lock(&comm->cmd_recv_mutex_);
                 num = comm->_serial->read(comm->t_buffer, 1);
                 // printf("=1. _serial->available num: %d\n", num);
 
@@ -155,6 +155,8 @@ void* future_comm::cmd_recv_thread_func(void* arg) {
                         }
                     }
                 }
+                pthread_mutex_unlock(&comm->cmd_recv_mutex_);
+           
             }
         }
         catch(serial::IOException &err)
@@ -162,8 +164,6 @@ void* future_comm::cmd_recv_thread_func(void* arg) {
             printf("read_some err: %s\n", err.what());
         }
         
-        pthread_mutex_unlock(&comm->cmd_recv_mutex_);
-
         usleep(20*1000);
     }
 

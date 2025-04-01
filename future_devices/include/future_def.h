@@ -118,11 +118,11 @@
 #define KEY_MENU                0x14            /**< 菜单 */
 #define KEY_FUNCTION            0x15            /**< 功能 */
 #define KEY_PRINT_UP            0x19            /**< 打印向上走纸 */
-#define KEY_CANCEL              0x1B            /**< 取消 */
+#define KEY_CANCEL              0x2E            //0x1B            /**< 取消 */
 #define KEY_UP                  0x26            /**< 向上 */
 #define KEY_DOWN                0x28            /**< 向下 */
 #define KEY_STAR                0x2A            /**< '*'键 */
-#define KEY_CLEAR               0x2E            /**< 清除 */
+#define KEY_CLEAR               0x1B            //0x2E            /**< 清除 */
 #define KEY_INVALID             0xFF            /**< 无效按键 */
 #define KEY_TIMEOUT             0x00            /**< 超时无按键 */
 #define KEY_OTHER               0x00            /**< 其他 */
@@ -153,9 +153,8 @@
 #define CMD_CLOSE_KEYBOARD                          0x31    /**< 关闭键盘 */
 #define CMD_READ_KEYBOARD_INPUT                     0x32    /**< 读取键盘输入 */
 #define CMD_CLEAR_KEYBOARD_CACHE                    0x33    /**< 清除按键缓存 */
-#define CMD_SET_KEYBOARD_CALLBACK                   0x34    /**< 设置按键回调函数 */
-#define CMD_SET_KEYBOARD_SOUND                      0x35    /**< 设置打开关闭按键音 */
-#define CMD_SET_KEYBOARD_BACKLIGHT                  0x36    /**< 设置按键背光 */
+#define CMD_SET_KEYBOARD_SOUND                      0x34    /**< 设置打开关闭按键音 */
+#define CMD_SET_KEYBOARD_BACKLIGHT                  0x35    /**< 设置按键背光 */
 #define CMD_OPEN_TP                                 0x3A    /**< 打开TP */
 #define CMD_CLOSE_TP                                0x3B    /**< 关闭TP */
 #define CMD_CHECK_TP_SUPPORT                        0x3C    /**< 检查是否支持TP */
@@ -293,6 +292,22 @@
 #define SDK_CARD_SEAT_SAM3  (0x03)
 
 /**
+ * @brief 密钥类型
+ */
+#define SDK_KEY_TYPE_A  'A'                /**< A卡 */
+#define SDK_KEY_TYPE_B  'B'                /**< B卡 */
+
+/**
+ * @brief 非接卡操作指令
+ */
+#define SDK_MIFARE_CARD_OPERATION_READ          'R'    /**< 读取 */
+#define SDK_MIFARE_CARD_OPERATION_WRITE         'W'    /**< 写入 */
+#define SDK_MIFARE_CARD_OPERATION_INCREMENT     '+'    /**< 增加 */
+#define SDK_MIFARE_CARD_OPERATION_DECREMENT     '-'    /**< 减少 */
+#define SDK_MIFARE_CARD_OPERATION_TRANSFER      '>'    /**< 转移 */
+
+
+/**
  * @brief 键盘背光状态
  */
 #define SDK_KEYBOARD_BACKLIGHT_OFF  (0x00)        /**< 关闭 */
@@ -327,8 +342,8 @@
 /**
  * @brief 蜂鸣器鸣叫类型
  */
-#define SDK_BEEP_NORMAL  (0x00)              /**< 正常 */
-#define SDK_BEEP_ABNORMAL  (0x01)            /**< 异常 */
+#define SDK_BEEP_NORMAL  (0x00)              /**< 正常 1声 */
+#define SDK_BEEP_ABNORMAL  (0x01)            /**< 异常 3声 */
 
 
 /**
