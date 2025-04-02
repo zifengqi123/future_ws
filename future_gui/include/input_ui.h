@@ -1,9 +1,10 @@
-#pragma once
+#ifndef __INPUT_UI_H_
+#define __INPUT_UI_H_
 
 #include "lvgl/lvgl.h"
+#include "config_gui.h"
 
-namespace future_gui
-{
+extern "C" {
 
 typedef struct ui_input
 {
@@ -15,28 +16,19 @@ typedef struct ui_input
     int width;
     int hight;
 
-    int x;
-    int y;
+    int x_start;
+    int y_start;
 
 }ui_input_t;
 
-#define INPUT_VIEW_WIDTH    (320)
-#define INPUT_STATUS_VIEW_HIGHT   (24)
-#define INPUT_VIEW_HIGHT    (240 - INPUT_STATUS_VIEW_HIGHT)
+void input_ui_init(lv_obj_t *parent);
+void input_ui_del();
 
-class input_ui
-{
-public:
-    input_ui(lv_obj_t *parent);
-    ~input_ui();
-
-    void ui_input_init(lv_obj_t *parent, int x, int y, int width, int hight);
-    void ui_input_del();
-
-    void ui_input_show(char * title, char* msg);
-
-private:
-    ui_input_t _ui_input;
-};
+void input_ui_show(char * title, char* msg);
 
 }
+
+
+
+
+#endif
