@@ -4,3 +4,6 @@
 [submodule "future_devices"]
 	path = future_devices
 	url = https://github.com/zifengqi123/future_devices.git
+[submodule "future_gui"]
+	path = future_gui
+	url = https://github.com/zifengqi123/future_gui.git
