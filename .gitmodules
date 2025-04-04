@@ -1,9 +1,9 @@
 [submodule "lvgl_v9.2/lv_port_linux"]
 	path = lvgl_v9.2/lv_port_linux
 	url = https://github.com/zifengqi123/lv_port_linux.git
-[submodule "future_devices"]
-	path = future_devices
-	url = https://github.com/zifengqi123/future_devices.git
-[submodule "future_gui"]
-	path = future_gui
-	url = https://github.com/zifengqi123/future_gui.git
+[submodule "smartwin_devices"]
+	path = smartwin_devices
+	url = https://github.com/zifengqi123/smartwin_devices.git
+[submodule "smartwin_gui"]
+	path = smartwin_gui
+	url = https://github.com/zifengqi123/smartwin_gui.git
